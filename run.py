@@ -31,6 +31,7 @@ def load_model(model_identifier, accelerator):
     return model, tokenizer
 
 def load_checkpoint(model_identifier):
+    model_identifier = model_identifier.replace("/", "-")
     filepath = os.path.join(CHECKPOINTS_DIR, f"{model_identifier}.output")
     if os.path.exists(filepath):
         output = json.load(open(filepath))
@@ -39,6 +40,7 @@ def load_checkpoint(model_identifier):
     return output
 
 def save_checkpoint(model_identifier, output):
+    model_identifier = model_identifier.replace("/", "-")
     filepath = os.path.join(CHECKPOINTS_DIR, f"{model_identifier}.output")
     json.dump(output, open(filepath, "w"), ensure_ascii=False, indent=4)
 
