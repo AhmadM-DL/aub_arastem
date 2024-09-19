@@ -97,7 +97,7 @@ def main():
             options_tokens_logits = last_token_logits[:, options_tokens].detach().cpu().numpy()
             conf = softmax(options_tokens_logits[0])
             pred = np.argmax(options_tokens_logits[0])
-        output.append({"id": id, "prediction": pred, "confidence": conf[pred]})
+        output.append({"id": id, "prediction": pred, "confidence": int(conf[pred])})
         save_checkpoint(args.model, output)
         if id>0 and id%100==0:
             if args.verbose: 
