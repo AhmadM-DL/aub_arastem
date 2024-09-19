@@ -54,19 +54,24 @@ def main():
     args = parser.parse_args()
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
-
+ 
+    if args.verbose: print("Setup ...")
     setup()
-    
+
+    if args.verbose: print("Load data ...")
     data = load_data(args.data)
     
+    if args.verbose: print("Load model ...")
     model, tokenizer = load_model(args.model)
     
     prompt_factory = PromptFactory()
     prompt_generator = prompt_factory.get_prompt_function(n_shots=0)
 
+    if args.verbose: print("Load Checkpoint ...")
     output = load_checkpoint(args.model)
     checkpoint = output[-1]["id"]
 
+    if args.verbose: print("Running Inference ...")
     for i, q in enumerate(data[checkpoint+1:]):
         id = i + checkpoint + 1
         question = q["question"]
