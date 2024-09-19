@@ -3,6 +3,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from utils import PromptFactory
 import torch
 import numpy as np
+from accelerate import Accelerator
+
 
 CHECKPOINTS_DIR = "./checkpoints/"
 
@@ -16,20 +18,16 @@ def setup():
     # Check checkpoint directory
     if not os.path.exists(CHECKPOINTS_DIR):
         os.mkdir(CHECKPOINTS_DIR)
-    # Check GPU
-    if not torch.cuda.is_available():
-        raise Exception("Please use an envirnoment that have a GPU")
     
 
 def load_data(data_path):
     data = json.load(open(data_path))
     return data
 
-def load_model(model_identifier, device):
+def load_model(model_identifier, accelerator):
     tokenizer = AutoTokenizer.from_pretrained(model_identifier)
     model = AutoModelForCausalLM.from_pretrained(model_identifier, trust_remote_code=True, device_map="auto")
-    model.eval()
-    model.to(device)
+    model = accelerator.prepare(model)
     return model, tokenizer
 
 def load_checkpoint(model_identifier):
@@ -59,7 +57,7 @@ def main():
     parser.add_argument('-v', '--verbose', action='store_true', help="Verbose")
     args = parser.parse_args()
 
-    device = "cuda"
+    accelerator = Accelerator()
  
     if args.verbose: print("Setup ...")
     setup()
@@ -68,7 +66,7 @@ def main():
     data = load_data(args.data)
     
     if args.verbose: print("Load model ...")
-    model, tokenizer = load_model(args.model, device)
+    model, tokenizer = load_model(args.model, accelerator)
     
     prompt_factory = PromptFactory()
     prompt_generator = prompt_factory.get_prompt_function(n_shots=0)
@@ -89,7 +87,7 @@ def main():
             input_size = inputs['input_ids'].size(1)
             if input_size > args.max_input_token:
                 raise ValueError(f"Input {id} is too long! The tokenized input has {input_size} tokens, which exceeds the maximum allowed size of {args.max_input_token} tokens.")
-            input_ids = inputs["input_ids"].to(device)
+            #input_ids = inputs["input_ids"]
             outputs = model(**inputs)#, labels=input_ids)
             last_token_logits = outputs.logits[:, -1, :]
             options_tokens_logits = last_token_logits[:, options_tokens].detach().cpu().numpy()
