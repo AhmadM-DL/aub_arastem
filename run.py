@@ -7,23 +7,29 @@ import numpy as np
 CHECKPOINTS_DIR = "./checkpoints/"
 
 def setup():
+    # Check Huggingface Token
     if os.path.exists(".env"):
         token = [l.split("=")[1] for l in open(".env", "r").readlines()][0]
         os.environ["HF_TOKEN"] = token
     else:
         raise Exception("Please add an .env file that includes huggingface HF_TOKEN")
+    # Check checkpoint directory
     if not os.path.exists(CHECKPOINTS_DIR):
         os.mkdir(CHECKPOINTS_DIR)
+    # Check GPU
+    if not torch.cuda.is_available():
+        raise Exception("Please use an envirnoment that have a GPU")
     
 
 def load_data(data_path):
     data = json.load(open(data_path))
     return data
 
-def load_model(model_identifier):
+def load_model(model_identifier, device):
     tokenizer = AutoTokenizer.from_pretrained(model_identifier)
     model = AutoModelForCausalLM.from_pretrained(model_identifier, trust_remote_code=True, device_map="auto")
     model.eval()
+    model.to(device)
     return model, tokenizer
 
 def load_checkpoint(model_identifier):
@@ -53,7 +59,7 @@ def main():
     parser.add_argument('-v', '--verbose', action='store_true', help="Verbose")
     args = parser.parse_args()
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = "cuda"
  
     if args.verbose: print("Setup ...")
     setup()
@@ -62,7 +68,7 @@ def main():
     data = load_data(args.data)
     
     if args.verbose: print("Load model ...")
-    model, tokenizer = load_model(args.model)
+    model, tokenizer = load_model(args.model, device)
     
     prompt_factory = PromptFactory()
     prompt_generator = prompt_factory.get_prompt_function(n_shots=0)
