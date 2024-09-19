@@ -58,6 +58,8 @@ def main():
     args = parser.parse_args()
 
     accelerator = Accelerator()
+    device = accelerator.device
+
  
     if args.verbose: print("Setup ...")
     setup()
@@ -88,7 +90,7 @@ def main():
             if input_size > args.max_input_token:
                 raise ValueError(f"Input {id} is too long! The tokenized input has {input_size} tokens, which exceeds the maximum allowed size of {args.max_input_token} tokens.")
             #input_ids = inputs["input_ids"]
-            outputs = model(**inputs)#, labels=input_ids)
+            outputs = model(**inputs).to(device)#, labels=input_ids)
             last_token_logits = outputs.logits[:, -1, :]
             options_tokens_logits = last_token_logits[:, options_tokens].detach().cpu().numpy()
             conf = softmax(options_tokens_logits[0])
