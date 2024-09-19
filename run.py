@@ -69,7 +69,7 @@ def main():
 
     if args.verbose: print("Load Checkpoint ...")
     output = load_checkpoint(args.model)
-    checkpoint = output[-1]["id"]
+    checkpoint = output[-1]["id"] if output else -1
 
     if args.verbose: print("Running Inference ...")
     for i, q in enumerate(data[checkpoint+1:]):
