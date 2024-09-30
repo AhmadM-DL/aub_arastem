@@ -104,7 +104,7 @@ def main():
 
  
     if args.verbose: print("Setup ...")
-    setup()
+    setup(args.root)
 
     if args.verbose: print("Load data ...")
     data = load_data(args.data)
