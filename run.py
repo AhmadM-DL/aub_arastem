@@ -89,7 +89,7 @@ def main():
     parser.add_argument('-d', '--data', type=str, required=True, help="MCQ data to infere on")
     parser.add_argument('-r', '--root', type=str, help="The ouput destination")
     parser.add_argument('-s', '--max_input_token', type=int, help="Max input tokens a model can consume")
-    parser.add_argument('--has_tokens_types', action='store_true', default=False, help="Does the tokenizer output token types")
+    parser.add_argument('--has_token_types', action='store_true', default=False, help="Does the tokenizer output token types")
     parser.add_argument('--is_seq2seq', action='store_true', default=False, help="Is the model sequence to sequence")
     parser.add_argument('-v', '--verbose', action='store_true', help="Verbose")
     args = parser.parse_args()
