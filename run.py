@@ -105,7 +105,7 @@ def main():
     data = load_data(args.data)
     
     if args.verbose: print("Load model ...")
-    model, tokenizer = load_model(args.model, accelerator)
+    model, tokenizer = load_model(args.model, accelerator, args.is_seq2seq)
     
     prompt_factory = PromptFactory()
     prompt_generator = prompt_factory.get_prompt_function(n_shots=0)
