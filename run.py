@@ -8,16 +8,21 @@ from accelerate import Accelerator
 
 CHECKPOINTS_DIR = "checkpoints"
 
-def setup():
+def setup(destination):
+
     # Check Huggingface Token
     if os.path.exists(".env"):
         token = [l.split("=")[1] for l in open(".env", "r").readlines()][0]
         os.environ["HF_TOKEN"] = token
     else:
         raise Exception("Please add an .env file that includes huggingface HF_TOKEN as HF_TOKEN=...")
+    
     # Check checkpoint directory
-    if not os.path.exists(CHECKPOINTS_DIR):
-        os.mkdir(CHECKPOINTS_DIR)
+    if os.path.exists(destination):
+        if not os.path.exists(os.path.join(destination, CHECKPOINTS_DIR)):
+            os.mkdir(os.path.join(destination, CHECKPOINTS_DIR))
+    else:
+        raise Exception(f"The destination {destination} doesn't exist")
     
 def load_data(data_path):
     data = json.load(open(data_path))
