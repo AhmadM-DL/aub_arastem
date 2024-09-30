@@ -45,7 +45,7 @@ def infere_from_model(model, tokenizer, prompt, device, is_seq2seq, has_token_ty
         else:
             inputs = tokenizer(prompt, return_tensors="pt").to(device)
         input_size = inputs['input_ids'].size(1)
-        if verbose and input_size > max_input_token:
+        if max_input_token and verbose and input_size > max_input_token:
             print(f"Input is too long! The tokenized input has {input_size} tokens, which exceeds the maximum allowed size of {max_input_token} tokens. Was truncized.")
         input_ids = inputs["input_ids"].to(device)
         if has_token_types:
