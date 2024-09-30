@@ -1,13 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=arastem_eval 
 
-#SBATCH --partition=gpu
-#SBATCH --nodes=1                      
-#SBATCH --ntasks=1                                
+#SBATCH --partition=gpu                               
 #SBATCH --gres=gpu:v100d32q:4                   
 
 #SBATCH --mem=32000                      
-#SBATCH --time=06:00:00                
+#SBATCH --time=06:00:00
+                
 #SBATCH --output=output_%j.log         
 #SBATCH --error=error_%j.log
 
