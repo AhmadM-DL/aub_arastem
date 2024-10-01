@@ -93,6 +93,7 @@ def main():
     parser.add_argument('-m', '--model', type=str, required=True, help="Huggingface model identifier")
     parser.add_argument('-d', '--data', type=str, required=True, help="MCQ data to infere on")
     parser.add_argument('-r', '--root', type=str, default=".", help="The ouput destination")
+    parser.add_argument('-hf', '--hf_cache', type=str, help="The location to download hugging face models")
     parser.add_argument('-s', '--max_input_token', type=int, help="Max input tokens a model can consume")
     parser.add_argument('--has_token_types', action='store_true', default=False, help="Does the tokenizer output token types")
     parser.add_argument('--is_seq2seq', action='store_true', default=False, help="Is the model sequence to sequence")
@@ -105,6 +106,8 @@ def main():
  
     if args.verbose: print("Setup ...")
     setup(args.root)
+    if args.hf_cache:
+        os.environ["HF_HUB_CACHE"] = args.hf_cache
 
     if args.verbose: print("Load data ...")
     data = load_data(args.data)
