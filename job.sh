@@ -13,7 +13,7 @@
 module load python/3
 source 
 
-export HF_HUB_CACHE=""
+export HF_HOME=""
 export HF_TOKEN=""
 
 MODEL=""

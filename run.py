@@ -96,7 +96,7 @@ def main():
     parser.add_argument('-m', '--model', type=str, required=True, help="Huggingface model identifier")
     parser.add_argument('-d', '--data', type=str, required=True, help="MCQ data to infere on")
     parser.add_argument('-r', '--root', type=str, default=".", help="The ouput destination")
-    parser.add_argument('-hf', '--hf_cache', type=str, help="The location to download hugging face models")
+    parser.add_argument('-hf', '--hf_home', type=str, help="The location to download hugging face models")
     parser.add_argument('-s', '--max_input_token', type=int, help="Max input tokens a model can consume")
     parser.add_argument('--has_token_types', action='store_true', default=False, help="Does the tokenizer output token types")
     parser.add_argument('--is_seq2seq', action='store_true', default=False, help="Is the model sequence to sequence")
@@ -109,11 +109,11 @@ def main():
  
     if args.verbose: print("Setup ...")
     setup(args.root)
-    if "HF_HUB_CACHE" in os.environ:
+    if "HF_HOME" in os.environ:
         pass
     else:
-        if args.hf_cache:
-            os.environ["HF_HUB_CACHE"] = args.hf_cache
+        if args.hf_home:
+            os.environ["HF_HOME"] = args.hf_home
 
     if args.verbose: print("Load data ...")
     data = load_data(args.data)
@@ -125,11 +125,7 @@ def main():
     prompt_generator = prompt_factory.get_prompt_function(n_shots=0)
 
     if args.verbose: print("Load Checkpoint ...")
-    if args.root:
-        destination = args.root
-    else:
-        destination = ""
-    output = load_checkpoint(destination, args.model)
+    output = load_checkpoint(args.root, args.model)
     checkpoint = output[-1]["id"] if output else -1
 
     if args.verbose: print("Running Inference ...")
@@ -140,7 +136,7 @@ def main():
         prompt = prompt_generator(question, options, subject=q["subject"], level=q["level"])
         pred, conf = infere_from_model(model, tokenizer, prompt, device, args.is_seq2seq, args.has_token_types, args.max_input_token, args.verbose)
         output.append({"id": id, "prediction": int(pred), "confidence": float(conf[pred])})
-        save_checkpoint(destination, args.model, output)
+        save_checkpoint(args.root, args.model, output)
         if id>0 and id%100==0:
             if args.verbose: 
                 print(f"Processed {id} questions")
