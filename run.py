@@ -18,7 +18,7 @@ def setup(destination):
         raise Exception("Please add an .env file that includes huggingface HF_TOKEN as HF_TOKEN=...")
     
     # Check checkpoint directory
-    if os.path.exists(destination):
+    if destination and os.path.exists(destination):
         if not os.path.exists(os.path.join(destination, CHECKPOINTS_DIR)):
             os.mkdir(os.path.join(destination, CHECKPOINTS_DIR))
     else:
@@ -92,7 +92,7 @@ def main():
     parser = argparse.ArgumentParser(description="A script that loads a model and compute inference on a dataset.")
     parser.add_argument('-m', '--model', type=str, required=True, help="Huggingface model identifier")
     parser.add_argument('-d', '--data', type=str, required=True, help="MCQ data to infere on")
-    parser.add_argument('-r', '--root', type=str, help="The ouput destination")
+    parser.add_argument('-r', '--root', type=str, default=".", help="The ouput destination")
     parser.add_argument('-s', '--max_input_token', type=int, help="Max input tokens a model can consume")
     parser.add_argument('--has_token_types', action='store_true', default=False, help="Does the tokenizer output token types")
     parser.add_argument('--is_seq2seq', action='store_true', default=False, help="Is the model sequence to sequence")
