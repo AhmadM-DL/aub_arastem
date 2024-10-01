@@ -11,11 +11,10 @@
 #SBATCH --error=error_%j.log
 
 module load python/3
-source /home/am252/scratch/myenv/bin/activate
+source 
 
 export HF_HUB_CACHE=""
 export HF_TOKEN=""
-
 
 MODEL=""
 DATA=""
