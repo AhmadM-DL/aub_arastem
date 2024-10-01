@@ -11,12 +11,15 @@ CHECKPOINTS_DIR = "checkpoints"
 def setup(destination):
 
     # Check Huggingface Token
-    if os.path.exists(".env"):
-        token = [l.split("=")[1] for l in open(".env", "r").readlines()][0]
-        os.environ["HF_TOKEN"] = token
+    if "HF_TOKEN" in os.environ:
+        pass
     else:
-        raise Exception("Please add an .env file that includes huggingface HF_TOKEN as HF_TOKEN=...")
-    
+        if os.path.exists(".env"):
+            token = [l.split("=")[1] for l in open(".env", "r").readlines()][0]
+            os.environ["HF_TOKEN"] = token
+        else:
+            raise Exception("Please add an .env file that includes huggingface HF_TOKEN as HF_TOKEN=...")
+        
     # Check checkpoint directory
     if destination and os.path.exists(destination):
         if not os.path.exists(os.path.join(destination, CHECKPOINTS_DIR)):
@@ -106,8 +109,11 @@ def main():
  
     if args.verbose: print("Setup ...")
     setup(args.root)
-    if args.hf_cache:
-        os.environ["HF_HUB_CACHE"] = args.hf_cache
+    if "HF_HUB_CACHE" in os.environ:
+        pass
+    else:
+        if args.hf_cache:
+            os.environ["HF_HUB_CACHE"] = args.hf_cache
 
     if args.verbose: print("Load data ...")
     data = load_data(args.data)
