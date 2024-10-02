@@ -4,7 +4,7 @@
 #SBATCH --partition=normal                               
 
 #SBATCH --mem=24000                      
-#SBATCH --time=2-00:00:00
+#SBATCH --time=1-00:00:00
 
 #SBATCH --output=output_%j.log         
 #SBATCH --error=error_%j.log

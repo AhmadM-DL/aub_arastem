@@ -9,4 +9,4 @@ if __name__ == "__main__":
     parser.add_argument("-m", "--model", type=str, help="Name of the model to download from Hugging Face Hub.")
     args = parser.parse_args()
     
-    download_model(args.model_name)
+    download_model(args.model)
