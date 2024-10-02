@@ -16,4 +16,5 @@ export HF_HOME=""
 export HF_TOKEN=""
 
 MODEL=""
-python download_model.py --model $MODEL
+TOKEN=""
+python download_model.py --model $MODEL --token $TOKEN
