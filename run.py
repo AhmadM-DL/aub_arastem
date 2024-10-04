@@ -34,9 +34,9 @@ def load_data(data_path):
 def load_model(model_identifier, accelerator, is_seq2seq):
     tokenizer = AutoTokenizer.from_pretrained(model_identifier)
     if is_seq2seq:
-        model = AutoModelForSeq2SeqLM.from_pretrained(model_identifier, trust_remote_code=True, device_map="auto")
+        model = AutoModelForSeq2SeqLM.from_pretrained(model_identifier, trust_remote_code=True, device_map="auto", offload_folder="offload")
     else:
-        model = AutoModelForCausalLM.from_pretrained(model_identifier, trust_remote_code=True, device_map="auto")
+        model = AutoModelForCausalLM.from_pretrained(model_identifier, trust_remote_code=True, device_map="auto", offload_folder="offload")
     model = accelerator.prepare(model)
     return model, tokenizer
 
