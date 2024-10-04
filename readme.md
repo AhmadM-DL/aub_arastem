@@ -1,19 +1,19 @@
 ## Supported Models
 | Done | Model | Max Input Tokens | is Seq2Seq | has token types
 | -- | -- | -- | -- | -- |
-| ✗ | XGLM (1.7B) | -- | -- | -- |
-| ✗ | XGLM (2.9B) | -- | -- | -- |
-| ✗ | XGLM (4.5B) | -- | -- | -- |
+| ✔ | XGLM (1.7B) | -- | -- | -- |
+| ✔ | XGLM (2.9B) | -- | -- | -- |
+| ✔ | XGLM (4.5B) | -- | -- | -- |
 | ✗ | XGLM (7.5B) | -- | -- | -- |
-| ✗ | BLOOMZ (560M) | -- | -- | -- |
-| ✗ | BLOOMZ (1.1B) | -- | -- | -- |
-| ✗ | BLOOMZ (1.7B) | -- | -- | -- |
-| ✗ | BLOOMZ (3B) | -- | -- | -- |
+| ✔ | BLOOMZ (560M) | -- | -- | -- |
+| ✔ | BLOOMZ (1.1B) | -- | -- | -- |
+| ✔ | BLOOMZ (1.7B) | -- | -- | -- |
+| ✔ | BLOOMZ (3B) | -- | -- | -- |
 | ✗ | BLOOMZ (7B) | -- | -- | -- |
-| ✗ | mT0small (300M) | -- | ✔ | -- |
-| ✗ | mT0base (580M) | -- | ✔ | -- | 
-| ✗ | mT0large (1.2B) | -- | ✔ | -- |
-| ✗ | mT0xl (3.7B) | -- | ✔ | -- |
+| ✔ | mT0small (300M) | -- | ✔ | -- |
+| ✔ | mT0base (580M) | -- | ✔ | -- | 
+| ✔ | mT0large (1.2B) | -- | ✔ | -- |
+| ✔ | mT0xl (3.7B) | -- | ✔ | -- |
 | ✗ | mT0xxl (13B) | -- | ✔ | -- |
 | ✗ | LLaMA2 (7B) | -- | -- | -- | 
 | ✗ | LLaMA2-chat (7B) | -- | -- | -- |
