@@ -3,6 +3,14 @@ from utils_prompt import PromptFactory
 
 CHECKPOINTS_DIR = "checkpoints"
 
+def setup(destination):
+    # Check checkpoint directory
+    if destination and os.path.exists(destination):
+        if not os.path.exists(os.path.join(destination, CHECKPOINTS_DIR)):
+            os.mkdir(os.path.join(destination, CHECKPOINTS_DIR))
+    else:
+        raise Exception(f"The destination {destination} doesn't exist")
+    
 def load_data(data_path):
     data = json.load(open(data_path))
     return data
@@ -43,6 +51,9 @@ def main():
     parser.add_argument('-r', '--root', type=str, default=".", help="The ouput destination")
     parser.add_argument('-v', '--verbose', action='store_true', help="Verbose")
     args = parser.parse_args()
+
+    if args.verbose: print("Setup ...")
+    setup(args.root)
 
     if args.verbose: print("Load data ...")
     data = load_data(args.data)
