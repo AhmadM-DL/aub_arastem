@@ -21,7 +21,8 @@ def save_checkpoint(destination, model_identifier, output):
     filepath = os.path.join(destination, CHECKPOINTS_DIR, f"{model_identifier}.output")
     json.dump(output, open(filepath, "w"), ensure_ascii=False, indent=4)
 
-def infere_from_model(endpoint, payload):
+def infere_from_model(endpoint, prompt):
+    payload = {"inputs":"", "prompt": prompt}
     response = requests.get(endpoint, json=payload)
     if response.status_code==200:
         output = response.json
