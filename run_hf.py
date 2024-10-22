@@ -72,7 +72,7 @@ def main():
         question = q["question"]
         options = [q[f"option_{i}"] for i in [0, 1, 2, 3] if f"option_{i}" in q and q[f"option_{i}"] != "" ]
         prompt = prompt_generator(question, options, subject=q["subject"], level=q["level"])
-        pred, conf = infere_from_model(args.endpoint, args.model)
+        pred, conf = infere_from_model(args.endpoint, prompt)
         output.append({"id": id, "prediction": int(pred), "confidence": float(conf[pred])})
         save_checkpoint(args.root, args.model, output)
         if id>0 and id%100==0:
