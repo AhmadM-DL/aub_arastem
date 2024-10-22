@@ -30,7 +30,7 @@ def infere_from_model(endpoint, prompt):
     }
     response = requests.post(endpoint, headers=headers, json=payload)
     if response.status_code==200:
-        output = response.json()
+        output = response.json()[0]
         return output["pred"], output["conf"]
     else:
         raise Exception(f"Error {response.status_code} requesting the model")
