@@ -10,21 +10,16 @@ class PromptFactory:
         else:
             raise ValueError(f"Unknown prompt type: {n_shots}")
 
-    def _zero_shot(self, question, options, subject, level):
+    def _zero_shot(self, question, question_options, subject, level):
         intro = f"You are an expert in {subject} at the {level} level. Analyze the given multiple-choice question and provide the correct answer using this approach:"
-        cot = f"1. Carefully read the question and options \n \
-                   2. Identify core {subject} concepts and required knowledge \n \
-                   3. Analyze each option for relevance, accuracy, and consistency \n \
-                   4. Consider {subject}-specific context and factors \n \
-                   5. Use elimination and comparative analysis \n \
-                   6. Select the most accurate answer \n \
-                   Maintain objectivity, consider {subject}-specific sensitivities, and base your decision on verifiable facts and sound logical reasoning within {subject} at the {level}."
+        cot = f"""1. Carefully read the question and options \n2. Identify core {subject} concepts and required knowledge \n3. Analyze each option for relevance, accuracy, and consistency \n4. Consider {subject}-specific context and factors \n5. Use elimination and comparative analysis \n6. Select the most accurate answer \nMaintain objectivity, consider {subject}-specific sensitivities, and base your decision on verifiable facts and sound logical reasoning within {subject} at the {level}."""
         question = f"Question: {question}"
         options = []
-        for i, option in enumerate(options):
-            options+= f"{i} - {option}"
-        options = "\n".join(options)
-        outro = "Correct option number is: "
+        mapping = {0:"A", 1:"B", 2:"C", 3:"D"}
+        for i, option in enumerate(question_options):
+            options.append(f"{mapping[i]} - {option}")
+        options = "Options:\n" + "\n".join(options)
+        outro = "Correct option is: "
         return "\n".join([intro, cot, question, options, outro])
 
     
