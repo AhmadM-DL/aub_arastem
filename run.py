@@ -43,9 +43,9 @@ def load_model(model_identifier, accelerator, is_seq2seq):
 def infere_from_model(model, tokenizer, prompt, device, is_seq2seq, has_token_types, max_input_token, verbose):
     
     if is_seq2seq:
-        options_tokens = [tokenizer.encode(choice)[0] for choice in ["0", "1", "2", "3", "4"]]
+        options_tokens = [tokenizer.encode(choice)[0] for choice in ["0", "1", "2", "3"]]
     else:
-        options_tokens = [tokenizer.encode(choice)[-1] for choice in ["0", "1", "2", "3", "4"]]
+        options_tokens = [tokenizer.encode(choice)[-1] for choice in ["0", "1", "2", "3"]]
     
     with torch.no_grad():
         if max_input_token:
