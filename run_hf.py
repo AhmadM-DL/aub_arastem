@@ -23,13 +23,17 @@ def save_checkpoint(destination, model_identifier, output):
 
 def infere_from_model(endpoint, prompt):
     payload = {"inputs":"", "prompt": prompt}
-    response = requests.get(endpoint, json=payload)
+    headers = {
+        "Accept" : "application/json",
+        "Authorization": "Bearer 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",
+        "Content-Type": "application/json" 
+    }
+    response = requests.post(endpoint, headers=headers, json=payload)
     if response.status_code==200:
-        output = response.json
+        output = response.json()
         return output["pred"], output["conf"]
     else:
-        raise Exception("Error requesting the model")
-
+        raise Exception(f"Error {response.status_code} requesting the model")
 
 def main():
     parser = argparse.ArgumentParser(description="A script that requests a model and compute inference on a dataset.")
