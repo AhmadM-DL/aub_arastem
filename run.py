@@ -31,12 +31,12 @@ def load_data(data_path):
     data = json.load(open(data_path))
     return data
 
-def load_model(model_identifier, accelerator, is_seq2seq):
-    tokenizer = AutoTokenizer.from_pretrained(model_identifier)
+def load_model(model_identifier, accelerator, is_seq2seq, token):
+    tokenizer = AutoTokenizer.from_pretrained(model_identifier, token=token)
     if is_seq2seq:
-        model = AutoModelForSeq2SeqLM.from_pretrained(model_identifier, trust_remote_code=True, device_map="auto", offload_folder="offload")
+        model = AutoModelForSeq2SeqLM.from_pretrained(model_identifier, trust_remote_code=True, device_map="auto", offload_folder="offload", token=token)
     else:
-        model = AutoModelForCausalLM.from_pretrained(model_identifier, trust_remote_code=True, device_map="auto", offload_folder="offload")
+        model = AutoModelForCausalLM.from_pretrained(model_identifier, trust_remote_code=True, device_map="auto", offload_folder="offload", token=token)
     model = accelerator.prepare(model)
     return model, tokenizer
 
@@ -97,6 +97,7 @@ def main():
     parser.add_argument('-d', '--data', type=str, required=True, help="MCQ data to infere on")
     parser.add_argument('-r', '--root', type=str, default=".", help="The ouput destination")
     parser.add_argument('-hf', '--hf_home', type=str, help="The location to download hugging face models")
+    parser.add_argument('-token', '--token', type=str, help="Hugging face token for gated repos")
     parser.add_argument('-s', '--max_input_token', type=int, help="Max input tokens a model can consume")
     parser.add_argument('--has_token_types', action='store_true', default=False, help="Does the tokenizer output token types")
     parser.add_argument('--is_seq2seq', action='store_true', default=False, help="Is the model sequence to sequence")
@@ -119,7 +120,7 @@ def main():
     data = load_data(args.data)
     
     if args.verbose: print("Load model ...")
-    model, tokenizer = load_model(args.model, accelerator, args.is_seq2seq)
+    model, tokenizer = load_model(args.model, accelerator, args.is_seq2seq, args.token)
     
     prompt_factory = PromptFactory()
     prompt_generator = prompt_factory.get_prompt_function(n_shots=0)
